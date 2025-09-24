@@ -39,8 +39,8 @@ recursos = {
 
 # Lembrete: dá pra colocar corzinhas dps pra ficar mais fácil do cara se localizar
 
-MENSAGEM_VALUE_ERROR = "\nOpção inválida. Por favor, digite apenas números inteiros."
-MENSAGEM_INDEX_ERROR = "\nOpção inválida. Por favor, digite apenas números que correspondam com uma das opções mostradas."
+MENSAGEM_VALUE_ERROR = "\033[91m\nOpção inválida. Por favor, digite apenas números inteiros.\033[0m"
+MENSAGEM_INDEX_ERROR = "\033[91m\nOpção inválida. Por favor, digite apenas números que correspondam com uma das opções mostradas.\033[0m"
 
 while True:
   try:
@@ -84,6 +84,107 @@ while True:
 
         print(f"\nVocê escolheu a ação {acao}")
 
+        # Ações de alunos
+        if opcao_nome == "estudantes":
+          if acao == "listar":
+            if len(recurso["dados"]) == 0:
+              print("\033[93mNenhum estudante foi cadastrado.\033[0m")
+              continue
+
+            for estudante in sorted(recurso["dados"], key=lambda x: x['nome']):
+              print(f" - {estudante['codigo']} - {estudante['nome']} - {estudante['cpf']}")
+
+            print("Fim da lista.")
+
+          elif acao == "criar":
+            codigo = int(input("Digite o código do estudante: "))
+
+            codigo_existe = False
+            for estudante in recurso["dados"]:
+              if estudante["codigo"] == codigo:
+                codigo_existe = True
+                break
+
+            if codigo_existe:
+              print(f"\033[91mCódigo {codigo} já está em uso. Tente novamente com outro código.\033[0m")
+              # talvez chamar função de listar alunos dps
+              continue
+
+            nome = input("Digite o nome do estudante: ")
+            cpf = input("Digite o CPF do estudante: ")
+
+            recurso["dados"].append({
+              "codigo": codigo,
+              "nome": nome,
+              "cpf": cpf,
+            })
+
+            print("Estudante adicionado com sucesso.")
+
+          elif acao == "atualizar":
+            if len(recurso["dados"]) == 0:
+              print("\033[93mNenhum estudante foi cadastrado.\033[0m")
+              continue
+
+            codigo = int(input("Digite o código do estudante que deseja atualizar: "))
+
+            estudante_encontrado = None
+            for estudante in recurso["dados"]:
+              if estudante["codigo"] == codigo:
+                estudante_encontrado = estudante
+                break
+
+            if not estudante_encontrado:
+              print(f"\033[93mNenhum estudante encontrado com o código {codigo}.\033[0m")
+              continue
+
+            novo_codigo = input(f"Digite o novo código do estudante [{estudante_encontrado['codigo']}] (opcional): ")
+
+            codigo_existe = False
+            
+            if novo_codigo and int(novo_codigo) != estudante_encontrado["codigo"]:
+              for estudante in recurso["dados"]:
+                if estudante["codigo"] == codigo:
+                  codigo_existe = True
+                  break
+
+            # fiquei com preguicinha de fazer um while aqui 🥺
+            if codigo_existe:
+              print(f"\033[91mCódigo {novo_codigo} já está em uso. Tente novamente com outro código.\033[0m")
+              continue
+            
+            novo_nome = input(f"Digite o novo nome do estudante [{estudante_encontrado['nome']}] (opcional): ")
+            novo_cpf = input(f"Digite o novo CPF do estudante [{estudante_encontrado['cpf']}] (opcional): ")
+
+            # estudante_encontrado["codigo"] = novo_codigo ?? estudante_encontrado["codigo"]
+            estudante_encontrado["codigo"] = int(novo_codigo) if novo_codigo else estudante_encontrado["codigo"]
+            estudante_encontrado["nome"] = novo_nome if novo_nome else estudante_encontrado["nome"]
+            estudante_encontrado["cpf"] = novo_cpf if novo_cpf else estudante_encontrado["cpf"]
+
+            print("Estudante atualizado com sucesso.")
+
+          elif acao == "remover":
+            if len(recurso["dados"]) == 0:
+              print("\033[93mNenhum estudante foi cadastrado.\033[0m")
+              continue
+
+            codigo = int(input("Digite o código do estudante que deseja remover: "))
+
+            estudante_encontrado = None
+            for estudante in recurso["dados"]:
+              if estudante["codigo"] == codigo:
+                estudante_encontrado = estudante
+                break
+
+            if not estudante_encontrado:
+              print(f"\033[91mNenhum estudante encontrado com o código {codigo}.\033[0m")
+              continue
+
+            recurso["dados"].remove(estudante_encontrado)
+            print(f"Estudante {estudante_encontrado['nome']} removido com sucesso.")
+
+          continue
+
         if acao == "criar": # o plano é dps usar esse ação pra chamar um callback, ai a prop "ações" de cada recurso iria ser um objeto (ou algo nessa vibe)
           novo_dado = input(f"Digite o nome que você deseja [{opcao_nome}]: ")
           recurso["dados"].append(novo_dado)
@@ -119,4 +220,4 @@ while True:
     print(MENSAGEM_INDEX_ERROR)
 
   except Exception as error:
-    print(f"\nVish maria, como que tu fez isso? {error}")
+    print(f"\033[91m\nVish maria, como que tu fez isso? {error}\033[0m")
