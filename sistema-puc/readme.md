@@ -42,3 +42,17 @@ Atividade Formativa - Raciocínio computacional - Semanas 1/2/3/4
 - Desenvolver a funcionalidade de editar um estudante, onde deve ser perguntado ao usuário o código do estudante que se deseja editar, e então realizar a entrada dos dados correspondentes a todos dados do estudante (código, nome e cpf). Após isso, estes dados devem ser atualizados no dicionário ou tupla correspondente dentro da lista de estudantes.
 
 ---
+
+# Semana 05
+Chegou a hora de iniciarmos a utilização de funções dentro de nosso algoritmo, visando a modularização de nosso sistema, maior organização do script e reaproveitamento de código. Vamos lá?
+O que devo desenvolver?
+- Você deve obrigatoriamente modularizar (colocar dentro de funções) as seguintes funcionalidades:
+  - Apresentação do Menu Principal
+  - Apresentação do Menu de Operações
+  - Inclusão de estudante
+  - Listagem de estudantes
+  - Edição de estudante
+  - Exclusão de estudante
+  
+Caso queira, você pode modularizar outras partes do sistema, desde que seguindo boas práticas de desenvolvimento e modularização.
+Para refletir: As 4 operações que estamos trabalhando (incluir, listar, editar, excluir), futuramente devem ser aplicadas a todos os dados que vamos trabalhar (estudantes, turmas, disciplinas, professores, matrículas). Será que conseguimos criar uma função única de inclusão para todos os tipos de dados? E para as outras operações?
