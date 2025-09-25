@@ -27,10 +27,10 @@ recursos = {
 
 MENSAGEM_VALUE_ERROR = "\033[91m\nOpção inválida. Por favor, digite apenas números inteiros.\033[0m"
 MENSAGEM_INDEX_ERROR = "\033[91m\nOpção inválida. Por favor, digite apenas números que correspondam com uma das opções mostradas.\033[0m"
-ARQUIVO_ESTUDANTES = os.path.join("dados", "estudante", "data.json")
 
 def obter_caminho_arquivo(nome_recurso):
   return os.path.join("dados", nome_recurso, "data.json")
+
 
 def salvar_dados_recurso(nome_recurso, lista_dados):
   arquivo_caminho = obter_caminho_arquivo(nome_recurso)
@@ -50,7 +50,8 @@ def salvar_dados_recurso(nome_recurso, lista_dados):
   except Exception as e:
     print(f"\033[91mErro ao salvar dados de {nome_recurso}: {e}\033[0m")
 
-def carregar_dados_recurso(nome_recurso):
+
+def carregar_dados_recurso(nome_recurso) -> list[dict]:
   arquivo_caminho = obter_caminho_arquivo(nome_recurso)
   
   if not os.path.exists(arquivo_caminho):
@@ -71,22 +72,17 @@ def carregar_dados_recurso(nome_recurso):
     print(f"\033[91mErro ao carregar dados de {nome_recurso}: {e}\033[0m")
     return []
 
-def salvar_estudantes(lista_estudantes):
-  salvar_dados_recurso("estudantes", lista_estudantes)
-
-def carregar_estudantes():
-  return carregar_dados_recurso("estudantes")
 
 def apresentar_menu_principal():
-  index = 0
   print("\nMenu principal")
   
   recursos_nomes = list(recursos.keys())
-  for recurso in recursos:
+
+  for index, recurso in enumerate(recursos_nomes):
     print(f"[{index}] - {recurso}")
-    index += 1
   
   return recursos_nomes
+
 
 def apresentar_menu_operacoes(opcao_nome):
   # menu de operações para um recurso específico
@@ -100,6 +96,35 @@ def apresentar_menu_operacoes(opcao_nome):
   
   return acoes
 
+
+def listar(lista_dados: list[dict]):  
+  if len(lista_dados) == 0:
+    print(f"\033[93mNenhum dado foi cadastrado.\033[0m")
+    return
+
+  for i, dado in enumerate(lista_dados):
+    par = i % 2 == 0
+    cor = "\033[47m" if par else "\033[46m"
+    print(f"{cor} - {" - ".join(dado.values())} \033[0m")
+    
+  print("Fim da lista.")
+
+
+def buscar_codigo(lista_dados: list[dict], codigo: int):
+  for dado in lista_dados:
+    if dado["codigo"] == codigo:
+      return dado
+      
+  return None
+
+
+def verificar_codigo_unico(lista_dados: list[dict], codigo: int):
+  # considerando que a PK de todas as "tabelas" ai ser sempre o código
+  dado = buscar_codigo(lista_dados, codigo)
+  
+  return dado is None
+
+
 def criar_estudante():
   codigo = int(input("Digite o código do estudante: "))
   nome = input("Digite o nome do estudante: ")
@@ -111,42 +136,31 @@ def criar_estudante():
     "cpf": cpf,
   }
   
-  lista_estudantes = carregar_estudantes()
+  lista_estudantes = carregar_dados_recurso("estudantes")
   
-  codigo_existe = False
-  for estudante in lista_estudantes:
-    if estudante["codigo"] == codigo:
-      codigo_existe = True
-      break
-  
-  if codigo_existe:
+  codigo_unico = verificar_codigo_unico(lista_estudantes, codigo)
+
+  if not codigo_unico:
     print(f"\033[91mCódigo {codigo} já está em uso. Tente novamente com outro código.\033[0m")
     return
   
   lista_estudantes.append(novo_estudante)
   
-  salvar_estudantes(lista_estudantes)
+  salvar_dados_recurso("estudantes", lista_estudantes)
   
   print("Estudante adicionado com sucesso.")
 
-def listar_estudantes():
-  lista_estudantes = carregar_estudantes()
 
-  if len(lista_estudantes) == 0:
-    print("\033[93mNenhum estudante foi cadastrado.\033[0m")
-    return
+def listar_estudantes():
+  lista_estudantes = carregar_dados_recurso("estudantes")
   
   estudantes_ordenados = sorted(lista_estudantes, key=lambda x: x['nome'])
 
-  for i, estudante in enumerate(estudantes_ordenados):
-    par = i % 2 == 0
-    cor = "\033[47m" if par else "\033[46m"
-    print(f"{cor} - {estudante['codigo']} - {estudante['nome']} - {estudante['cpf']} \033[0m")
+  listar(estudantes_ordenados)
 
-  print("Fim da lista.")
 
 def editar_estudante():
-  lista_estudantes = carregar_estudantes()
+  lista_estudantes = carregar_dados_recurso("estudantes")
   
   if len(lista_estudantes) == 0:
     print("\033[93mNenhum estudante foi cadastrado.\033[0m")
@@ -154,11 +168,7 @@ def editar_estudante():
   
   codigo = int(input("Digite o código do estudante que deseja atualizar: "))
   
-  estudante_encontrado = None
-  for estudante in lista_estudantes:
-    if estudante["codigo"] == codigo:
-      estudante_encontrado = estudante
-      break
+  estudante_encontrado = buscar_codigo(lista_estudantes, codigo)
   
   if not estudante_encontrado:
     print(f"\033[93mNenhum estudante encontrado com o código {codigo}.\033[0m")
@@ -166,16 +176,11 @@ def editar_estudante():
   
   novo_codigo = input(f"Digite o novo código do estudante [{estudante_encontrado['nome']}] (opcional): ")
   
-  codigo_existe = False
+  codigo_unico = verificar_codigo_unico(lista_estudantes, int(novo_codigo)) if novo_codigo else True
   
-  if novo_codigo and int(novo_codigo) != estudante_encontrado["codigo"]:
-    for estudante in lista_estudantes:
-      if estudante["codigo"] == int(novo_codigo):
-        codigo_existe = True
-        break
-  
-  if codigo_existe:
+  if not codigo_unico and int(novo_codigo) != estudante_encontrado["codigo"]:
     print(f"\033[91mCódigo {novo_codigo} já está em uso. Tente novamente com outro código.\033[0m")
+
     print("Lista de estudantes disponíveis:")
     listar_estudantes()
     return
@@ -188,12 +193,13 @@ def editar_estudante():
   estudante_encontrado["cpf"] = novo_cpf or estudante_encontrado["cpf"]
 
   # aqui a gente tem fé que estudante_encontrado é uma referência de uma posição X na lista de estudantes, logo, quando alteramos ele, já é pra ter alterado na lista
-  salvar_estudantes(lista_estudantes)
+  salvar_dados_recurso("estudantes", lista_estudantes)
   
   print("Estudante atualizado com sucesso.")
 
+
 def excluir_estudante():
-  lista_estudantes = carregar_estudantes()
+  lista_estudantes = carregar_dados_recurso("estudantes")
 
   if len(lista_estudantes) == 0:
     print("\033[93mNenhum estudante foi cadastrado.\033[0m")
@@ -201,11 +207,7 @@ def excluir_estudante():
   
   codigo = int(input("Digite o código do estudante que deseja remover: "))
   
-  estudante_encontrado = None
-  for estudante in lista_estudantes:
-    if estudante["codigo"] == codigo:
-      estudante_encontrado = estudante
-      break
+  estudante_encontrado = buscar_codigo(lista_estudantes, codigo)
   
   if not estudante_encontrado:
     print(f"\033[91mNenhum estudante encontrado com o código {codigo}.\033[0m")
@@ -213,9 +215,10 @@ def excluir_estudante():
   
   lista_estudantes.remove(estudante_encontrado)
   
-  salvar_estudantes(lista_estudantes)
+  salvar_dados_recurso("estudantes", lista_estudantes)
   
   print(f"Estudante {estudante_encontrado['nome']} removido com sucesso.")
+
 
 def main():
   while True:
@@ -256,34 +259,50 @@ def main():
             elif acao == "remover":
               excluir_estudante()
             continue
-          
-          if acao == "listar":
-            lista_dados = carregar_dados_recurso(opcao_nome)
-            
-            if len(lista_dados) == 0:
-              print(f"\033[93mNenhum dado foi cadastrado para {opcao_nome}.\033[0m")
-              continue
-            
-            print(f"\nLista de {opcao_nome}:")
-            for i, dado in enumerate(sorted(lista_dados, key=lambda x: x["nome"])):
-              par = i % 2 == 0
-              cor = "\033[47m" if par else "\033[46m"
-              print(f"{cor} - {dado["nome"]} \033[0m")
-              
-            print("Fim da lista.")
 
-          elif acao == "criar":
-            novo_nome = input(f"Digite o nome que você deseja para {opcao_nome}: ")
-            
-            lista_dados = carregar_dados_recurso(opcao_nome)
-            
-            novo_item = {"nome": novo_nome}
-            
-            lista_dados.append(novo_item)
-            
-            salvar_dados_recurso(opcao_nome, lista_dados)
-            
-            print(f"\033[92m{opcao_nome.capitalize()} '{novo_nome}' adicionado com sucesso!\033[0m")
+          elif opcao_nome == "disciplinas":
+            if acao == "listar":
+              listar_disciplinas()
+            elif acao == "criar":
+              criar_disciplina()
+            elif acao == "atualizar":
+              editar_disciplina()
+            elif acao == "remover":
+              excluir_disciplina()
+            continue
+          
+          elif opcao_nome == "professores":
+            if acao == "listar":
+              listar_professores()
+            elif acao == "criar":
+              criar_professor()
+            elif acao == "atualizar":
+              editar_professor()
+            elif acao == "remover":
+              excluir_professor()
+            continue
+
+          elif opcao_nome == "turmas":
+            if acao == "listar":
+              listar_turmas()
+            elif acao == "criar":
+              criar_turma()
+            elif acao == "atualizar":
+              editar_turma()
+            elif acao == "remover":
+              excluir_turma()
+            continue
+
+          elif opcao_nome == "matriculas":
+            if acao == "listar":
+              listar_matriculas()
+            elif acao == "criar":
+              criar_matricula()
+            elif acao == "atualizar":
+              editar_matricula()
+            elif acao == "remover":
+              excluir_matricula()
+            continue
           
           else:
             print(f"\nAção {acao} de {opcao_nome} em desenvolvimento")
@@ -306,6 +325,7 @@ def main():
     
     except Exception as error:
       print(f"\033[91m\nVish maria, como que tu fez isso? {error}\033[0m")
+
 
 if __name__ == "__main__":
   main()
