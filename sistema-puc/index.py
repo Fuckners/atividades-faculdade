@@ -105,7 +105,7 @@ def listar(lista_dados: list[dict]):
   for i, dado in enumerate(lista_dados):
     par = i % 2 == 0
     cor = "\033[47m" if par else "\033[46m"
-    print(f"{cor} - {" - ".join(dado.values())} \033[0m")
+    print(f"{cor} - {" - ".join(map(str, dado.values()))} \033[0m")
     
   print("Fim da lista.")
 
