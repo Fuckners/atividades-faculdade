@@ -75,8 +75,11 @@ public class Financiamento {
     }
 
     public void mostrar() {
+        System.out.println("=".repeat(55));
         System.out.printf("Valor total do imóvel: R$ %.2f\n", valorImovel);
         System.out.printf("Valor final do financiamento: R$ %.2f\n", pagamentoTotal());
         System.out.printf("Valor parcela mensal do financiamento: R$ %.2f\n", pagamentoMensal());
+        System.out.println("=".repeat(55));
+        System.out.println();
     }
 }
