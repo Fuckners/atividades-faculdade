@@ -1,9 +1,24 @@
 package model;
 
 public class Financiamento {
-    double valorImovel;
-    int prazoFinanciamentoAnos;
-    double taxaJurosAnual;
+    private double valorImovel;
+
+    public double getValorImovel() {
+        return valorImovel;
+    }
+
+    private int prazoFinanciamentoAnos;
+
+    public int getPrazoFinanciamentoAnos() {
+        return prazoFinanciamentoAnos;
+    }
+
+    // Porcentagem
+    private double taxaJurosAnual;
+
+    public double getTaxaJurosAnual() {
+        return taxaJurosAnual;
+    }
 
     public Financiamento(double valorImovel, int prazoFinanciamentoAnos) {
         this(valorImovel, prazoFinanciamentoAnos, 10.0f);
@@ -15,24 +30,20 @@ public class Financiamento {
         this.taxaJurosAnual = taxaJurosAnual;
     }
 
-    double getPrazoFinanciamentoMes() {
+    public double getPrazoFinanciamentoMes() {
         return prazoFinanciamentoAnos * 12;
     }
 
-
-    double getTaxaAnual() {
+    public double getTaxaAnual() {
         return valorImovel * (taxaJurosAnual / 100);
     }
 
-    double getTaxaMes() {
+    public double getTaxaMes() {
         return getTaxaAnual() / 12;
     }
 
-    public double calcularPagamentoMensal() {
+    public double pagamentoMensal() {
         double valorPagamentoBrutoMes = valorImovel / getPrazoFinanciamentoMes();
-
-        System.out.printf("valor bruto por mês: %f\n", valorPagamentoBrutoMes);
-        System.out.printf("Porcentagem juros: %f\n", getTaxaMes());
 
         // Sei que o cálculo está diferente do enunciado da atividade
         // Mas é por que acredito que estava errado
@@ -40,8 +51,8 @@ public class Financiamento {
         return valorPagamentoBrutoMes + getTaxaMes();
     }
 
-    public double calcularPagamentoTotal() {
-        double pagamentoMensal = calcularPagamentoMensal();
+    public double pagamentoTotal() {
+        double pagamentoMensal = pagamentoMensal();
 
         return pagamentoMensal * getPrazoFinanciamentoMes();
     }
