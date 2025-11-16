@@ -17,7 +17,7 @@ public class Main {
 
         Financiamento financiamento = new Financiamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno);
 
-        System.out.printf("O valor total do seu financiamento ficou em R$ %.2f e você terá que pagar R$ %.2f por mês.", financiamento.calcularPagamentoTotal(), financiamento.calcularPagamentoMensal());
+        financiamento.mostrar();
 
         sc.close();
     }
