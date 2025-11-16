@@ -3,6 +3,11 @@ package model;
 public class Financiamento {
     private double valorImovel;
 
+    public void setValorImovel(double valor) {
+        if (valor <= 0) valor = 0;
+
+        this.valorImovel = valor;
+    }
     public double getValorImovel() {
         return valorImovel;
     }
@@ -13,6 +18,12 @@ public class Financiamento {
         return prazoFinanciamentoAnos;
     }
 
+    public void setPrazoFinanciamentoAnos(int valor) {
+        if (valor <= 0) valor = 0;
+
+        this.prazoFinanciamentoAnos = valor;
+    }
+
     // Porcentagem
     private double taxaJurosAnual;
 
@@ -20,14 +31,20 @@ public class Financiamento {
         return taxaJurosAnual;
     }
 
+    public void setTaxaJurosAnual(double valor) {
+        if (valor <= 0) valor = 0;
+
+        this.taxaJurosAnual = valor;
+    }
+
     public Financiamento(double valorImovel, int prazoFinanciamentoAnos) {
         this(valorImovel, prazoFinanciamentoAnos, 10.0f);
     }
 
     public Financiamento(double valorImovel, int prazoFinanciamentoAnos, double taxaJurosAnual) {
-        this.valorImovel = valorImovel;
-        this.prazoFinanciamentoAnos = prazoFinanciamentoAnos;
-        this.taxaJurosAnual = taxaJurosAnual;
+        setValorImovel(valorImovel);
+        setPrazoFinanciamentoAnos(prazoFinanciamentoAnos);
+        setTaxaJurosAnual(taxaJurosAnual);
     }
 
     public double getPrazoFinanciamentoMes() {
