@@ -25,11 +25,11 @@ public class Main {
         int prazoFinanciamentoAno = interfaceUsuario.pedirPrazoFinanciamentoAno();
         double taxaJurosAno = interfaceUsuario.pedirTaxaJurosAno();
 
-        financiamentos.add(new Casa(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
-        financiamentos.add(new Casa(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
-        financiamentos.add(new Apartamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
-        financiamentos.add(new Apartamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
-        financiamentos.add(new Terreno(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
+        financiamentos.add(new Casa(valorImovel, prazoFinanciamentoAno, taxaJurosAno, 200, 300));
+        financiamentos.add(new Casa(valorImovel, prazoFinanciamentoAno, taxaJurosAno, 100, 150));
+        financiamentos.add(new Apartamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno, 2, 505));
+        financiamentos.add(new Apartamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno, 1, 404));
+        financiamentos.add(new Terreno(valorImovel, prazoFinanciamentoAno, taxaJurosAno, "comercial"));
 
         for (Financiamento financiamento : financiamentos) {
             financiamento.mostrar();

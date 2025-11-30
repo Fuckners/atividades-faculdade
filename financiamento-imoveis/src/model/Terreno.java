@@ -2,6 +2,21 @@ package model;
 
 public class Terreno extends Financiamento {
 
+    private String tipoZona; // comercial | residencial
+
+    public String getTipoZona() {
+        return tipoZona;
+    }
+
+    public void setTipoZona(String tipoZona) {
+//        if (!tipoZona.equals("residencial") && !tipoZona.equals("comercial")) {
+//            throw alguma coisa (?)
+//            return;
+//        }
+
+        this.tipoZona = tipoZona;
+    }
+
     private double acrescimoInadimplencia;
 
     public double getAcrescimoInadimplencia() {
@@ -14,14 +29,14 @@ public class Terreno extends Financiamento {
         this.acrescimoInadimplencia = valor;
     }
 
-    public Terreno(double valorImovel, int prazoFinanciamentoAnos, double taxaJurosAnual) {
+    public Terreno(double valorImovel, int prazoFinanciamentoAnos, double taxaJurosAnual, String tipoZona, double acrescimoInadimplencia) {
         super(valorImovel, prazoFinanciamentoAnos, taxaJurosAnual);
-        setAcrescimoInadimplencia(2);
+        setTipoZona(tipoZona);
+        setAcrescimoInadimplencia(acrescimoInadimplencia);
     }
 
-    public Terreno(double valorImovel, int prazoFinanciamentoAnos, double taxaJurosAnual, double acrescimoInadimplencia) {
-        super(valorImovel, prazoFinanciamentoAnos, taxaJurosAnual);
-        setAcrescimoInadimplencia(acrescimoInadimplencia);
+    public Terreno(double valorImovel, int prazoFinanciamentoAnos, double taxaJurosAnual, String tipoZona) {
+        this(valorImovel, prazoFinanciamentoAnos, taxaJurosAnual, tipoZona, 2);
     }
 
     @Override
