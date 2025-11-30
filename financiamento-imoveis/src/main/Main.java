@@ -1,6 +1,9 @@
 package main;
 
+import model.Apartamento;
+import model.Casa;
 import model.Financiamento;
+import model.Terreno;
 import util.InterfaceUsuario;
 
 import java.util.ArrayList;
@@ -18,21 +21,21 @@ public class Main {
         double totalImoveis = 0;
         double totalFinanciamentos = 0;
 
-        int quantidadeFinanciamentos = 4;
+        double valorImovel = interfaceUsuario.pedirValorImovel();
+        int prazoFinanciamentoAno = interfaceUsuario.pedirPrazoFinanciamentoAno();
+        double taxaJurosAno = interfaceUsuario.pedirTaxaJurosAno();
 
-        for (int contador = 0; contador < quantidadeFinanciamentos; contador++) {
-            double valorImovel = interfaceUsuario.pedirValorImovel();
-            int prazoFinanciamentoAno = interfaceUsuario.pedirPrazoFinanciamentoAno();
-            double taxaJurosAno = interfaceUsuario.pedirTaxaJurosAno();
+        financiamentos.add(new Casa(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
+        financiamentos.add(new Casa(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
+        financiamentos.add(new Apartamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
+        financiamentos.add(new Apartamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
+        financiamentos.add(new Terreno(valorImovel, prazoFinanciamentoAno, taxaJurosAno));
 
-            Financiamento financiamento = new Financiamento(valorImovel, prazoFinanciamentoAno, taxaJurosAno);
-
+        for (Financiamento financiamento : financiamentos) {
             financiamento.mostrar();
 
             totalImoveis += financiamento.getValorImovel();
             totalFinanciamentos += financiamento.pagamentoTotal();
-
-            financiamentos.add(financiamento);
         }
 
         System.out.printf("Total de todos os imóveis: R$ %.2f\n", totalImoveis);
