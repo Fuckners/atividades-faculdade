@@ -1,6 +1,6 @@
 package model;
 
-public class Financiamento {
+public abstract class Financiamento {
     private double valorImovel;
 
     public void setValorImovel(double valor) {
@@ -55,11 +55,7 @@ public class Financiamento {
         return getTaxaAnual() / 12;
     }
 
-    public double pagamentoMensal() {
-        double valorPagamentoBrutoMes = getValorImovel() / getPrazoFinanciamentoMes();
-
-        return valorPagamentoBrutoMes + getTaxaMes();
-    }
+    public abstract double pagamentoMensal();
 
     public double pagamentoTotal() {
         double pagamentoMensal = pagamentoMensal();

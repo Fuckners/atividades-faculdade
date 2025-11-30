@@ -24,6 +24,8 @@ public class Casa extends Financiamento {
 
     @Override
     public double pagamentoMensal() {
-        return super.pagamentoMensal() + getValorSeguroMensal();
+        double valorPagamentoBrutoMes = getValorImovel() / getPrazoFinanciamentoMes();
+
+        return valorPagamentoBrutoMes + getTaxaMes() + getValorSeguroMensal();
     }
 }

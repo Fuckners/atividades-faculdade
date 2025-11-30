@@ -26,7 +26,10 @@ public class Terreno extends Financiamento {
 
     @Override
     public double pagamentoMensal() {
-        double valorPagamentoMes = super.pagamentoMensal();
+        double valorPagamentoBrutoMes = getValorImovel() / getPrazoFinanciamentoMes();
+
+        double valorPagamentoMes = valorPagamentoBrutoMes + getTaxaMes();
+
         double taxaInadimplenciaPercentual = getAcrescimoInadimplencia() / 100;
 
         return valorPagamentoMes * (1 + taxaInadimplenciaPercentual);
