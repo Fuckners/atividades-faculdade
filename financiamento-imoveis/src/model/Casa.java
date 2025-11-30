@@ -1,5 +1,7 @@
 package model;
 
+import util.AumentoMaiorQueJurosException;
+
 public class Casa extends Financiamento {
 
     private double areaConstruida;
@@ -53,10 +55,25 @@ public class Casa extends Financiamento {
         this(valorImovel, prazoFinanciamentoAnos, taxaJurosAnual, areaConstruida, areaTerreno, 80);
     }
 
+    private void validaPagamentoMensal(double taxaMes, double valorSeguroMensal) throws AumentoMaiorQueJurosException {
+        if (valorSeguroMensal > taxaMes / 2) {
+            throw new AumentoMaiorQueJurosException("O valor do seguro mensal não pode ser maior que metade da taxa mensal.");
+        }
+    }
+
     @Override
     public double pagamentoMensal() {
         double valorPagamentoBrutoMes = getValorImovel() / getPrazoFinanciamentoMes();
+        double taxaMes = getTaxaMes();
+        double valorAcrescimoSeguro = getValorSeguroMensal();
 
-        return valorPagamentoBrutoMes + getTaxaMes() + getValorSeguroMensal();
+        try {
+            validaPagamentoMensal(taxaMes, valorAcrescimoSeguro);
+        } catch (AumentoMaiorQueJurosException e) {
+            System.out.println(e.getMessage());
+            valorAcrescimoSeguro = taxaMes;
+        }
+
+        return valorPagamentoBrutoMes + taxaMes + valorAcrescimoSeguro;
     }
 }
