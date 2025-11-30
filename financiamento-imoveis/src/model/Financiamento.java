@@ -37,10 +37,6 @@ public class Financiamento {
         this.taxaJurosAnual = valor;
     }
 
-    public Financiamento(double valorImovel, int prazoFinanciamentoAnos) {
-        this(valorImovel, prazoFinanciamentoAnos, 10.0f);
-    }
-
     public Financiamento(double valorImovel, int prazoFinanciamentoAnos, double taxaJurosAnual) {
         setValorImovel(valorImovel);
         setPrazoFinanciamentoAnos(prazoFinanciamentoAnos);
@@ -48,11 +44,11 @@ public class Financiamento {
     }
 
     public double getPrazoFinanciamentoMes() {
-        return prazoFinanciamentoAnos * 12;
+        return getPrazoFinanciamentoAnos() * 12;
     }
 
     public double getTaxaAnual() {
-        return valorImovel * (taxaJurosAnual / 100);
+        return getValorImovel() * (getTaxaJurosAnual() / 100);
     }
 
     public double getTaxaMes() {
@@ -60,10 +56,7 @@ public class Financiamento {
     }
 
     public double pagamentoMensal() {
-        double valorPagamentoBrutoMes = valorImovel / getPrazoFinanciamentoMes();
-
-        // Sei que o cálculo está diferente do enunciado da atividade
-        // Mas é por que acredito que estava errado
+        double valorPagamentoBrutoMes = getValorImovel() / getPrazoFinanciamentoMes();
 
         return valorPagamentoBrutoMes + getTaxaMes();
     }
@@ -76,7 +69,7 @@ public class Financiamento {
 
     public void mostrar() {
         System.out.println("=".repeat(55));
-        System.out.printf("Valor total do imóvel: R$ %.2f\n", valorImovel);
+        System.out.printf("Valor total do imóvel: R$ %.2f\n", getValorImovel());
         System.out.printf("Valor final do financiamento: R$ %.2f\n", pagamentoTotal());
         System.out.printf("Valor parcela mensal do financiamento: R$ %.2f\n", pagamentoMensal());
         System.out.println("=".repeat(55));
