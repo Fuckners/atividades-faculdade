@@ -9,25 +9,39 @@ public class InterfaceUsuario {
     public InterfaceUsuario(Scanner sc) {
         this.sc = sc;
     }
+
+    public void validaValorImovel(double valorImovel) throws ValorImovelNegativoException {
+        if (valorImovel <= 0) {
+            throw new ValorImovelNegativoException("O valor do imóvel precisa ser maior que zero.");
+        }
+    }
+
     public double pedirValorImovel() {
         double valorImovel;
-        boolean ehNegativo;
 
         while (true) {
             System.out.print("Digite o valor total do imóvel (Sem limite máximo de valor): ");
             valorImovel = sc.nextDouble();
 
-            ehNegativo = valorImovel <= 0;
-
-            if (ehNegativo) {
-                System.out.println("O valor do imóvel precisa ser maior que zero.");
-                continue;
+            try {
+                validaValorImovel(valorImovel);
+                break;
+            } catch (ValorImovelNegativoException error) {
+                System.out.println(error.getMessage());
             }
-
-            break;
-        };
+        }
 
         return valorImovel;
+    }
+
+    public void validaPrazoFinanciamento(int prazoFinanciamentoAno) throws PrazoFinanciamentoInvalidoException {
+        if (prazoFinanciamentoAno <= 0) {
+            throw new PrazoFinanciamentoInvalidoException("O prazo do financiamento precisa ser maior que zero.");
+        }
+
+        if (prazoFinanciamentoAno > 50) {
+            throw new PrazoFinanciamentoInvalidoException("O prazo de financiamento precisa ser menor que 50 anos. Dúvido que vá viver muito mais que isso.");
+        }
     }
 
     // Fiquei na dúvida se o financiamento pode ter apenas anos inteiros ou se posso financiar em 1 ano e meio, por exemplo.
@@ -35,61 +49,45 @@ public class InterfaceUsuario {
     public int pedirPrazoFinanciamentoAno() {
         int prazoFinanciamentoAno;
 
-        int maxAnos = 50;
-
-        boolean ehNegativo;
-        boolean ehMaiorMax;
-
         while (true) {
             System.out.print("Digite quantos anos até financiar: ");
             prazoFinanciamentoAno = sc.nextInt();
 
-            ehNegativo = prazoFinanciamentoAno <= 0;
-            ehMaiorMax = prazoFinanciamentoAno > maxAnos;
-
-            if (ehNegativo) {
-                System.out.println("O prazo do financiamento precisa ser maior que zero.");
-                continue;
+            try {
+                validaPrazoFinanciamento(prazoFinanciamentoAno);
+                break;
+            } catch (PrazoFinanciamentoInvalidoException error) {
+                System.out.println(error.getMessage());
             }
-
-            if (ehMaiorMax) {
-                System.out.printf("O prazo de financiamento precisa ser menor que %d anos. Dúvido que vá viver muito mais que isso.\n", maxAnos);
-                continue;
-            }
-
-            break;
-        };
+        }
 
         return prazoFinanciamentoAno;
+    }
+
+    public void validaTaxaJuros(double taxaJurosAno) throws TaxaJurosInvalidaException {
+        if (taxaJurosAno <= 0) {
+            throw new TaxaJurosInvalidaException("A taxa de juros anual precisa ser positiva.");
+        }
+
+        if (taxaJurosAno >= 200) {
+            throw new TaxaJurosInvalidaException("A taxa de juros anual precisa ser menor que 200. É financiamento ou agiotagem?");
+        }
     }
 
     public double pedirTaxaJurosAno() {
         double taxaJurosAno;
 
-        int max = 200;
-
-        boolean ehNegativo;
-        boolean ehMaiorMax;
-
         while (true) {
-            System.out.print("Digite a taxa de justos anual: ");
+            System.out.print("Digite a taxa de juros anual: ");
             taxaJurosAno = sc.nextDouble();
 
-            ehNegativo = taxaJurosAno <= 0;
-            ehMaiorMax = taxaJurosAno >= max;
-
-            if (ehNegativo) {
-                System.out.print("A taxa de juros anual precisa ser positiva.");
-                continue;
+            try {
+                validaTaxaJuros(taxaJurosAno);
+                break;
+            } catch (TaxaJurosInvalidaException error) {
+                System.out.println(error.getMessage());
             }
-
-            if (ehMaiorMax) {
-                System.out.printf("A taxa de juros anual precisa ser menor que %d. É financiamento ou agiotagem?\n", max);
-                continue;
-            }
-
-            break;
-        };
+        }
 
         return taxaJurosAno;
     }

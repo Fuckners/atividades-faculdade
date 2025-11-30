@@ -12,10 +12,21 @@
             <set>
               <option value="7f4b48d4-2b82-4552-8d7a-50f09d9f4efc" />
               <option value="212e1808-89d4-40bf-b40c-1f5dab95d215" />
+              <option value="2a96c4e6-38e6-4649-bffd-9a2877abbf9c" />
+              <option value="46ec0120-560d-47b6-b8ba-efbaee493ad7" />
             </set>
           </value>
         </entry>
       </map>
     </option>
+    <pendingWorkingSetItems>
+      <entry key="a129f02b-4f09-4a8f-bd3a-b7af6819d792">
+        <set>
+          <option value="file://$PROJECT_DIR$/src/util/PrazoFinanciamentoInvalidoException.java" />
+          <option value="file://$PROJECT_DIR$/src/util/TaxaJurosInvalidaException.java" />
+          <option value="file://$PROJECT_DIR$/src/util/InterfaceUsuario.java" />
+        </set>
+      </entry>
+    </pendingWorkingSetItems>
   </component>
 </project>
