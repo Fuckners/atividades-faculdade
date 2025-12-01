@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Financiamento {
+import java.io.Serializable;
+
+public abstract class Financiamento implements Serializable {
     private double valorImovel;
 
     public void setValorImovel(double valor) {
