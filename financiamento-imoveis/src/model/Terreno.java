@@ -49,4 +49,17 @@ public class Terreno extends Financiamento {
 
         return valorPagamentoMes * (1 + taxaInadimplenciaPercentual);
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        String base = super.toString();
+
+        sb
+            .append(base)
+            .append(String.format("| Tipo de Zona: %s ", getTipoZona()))
+            .append(String.format("| Acréscimo por Inadimplência: %.2f ", getAcrescimoInadimplencia()));
+
+        return sb.toString();
+    }
 }

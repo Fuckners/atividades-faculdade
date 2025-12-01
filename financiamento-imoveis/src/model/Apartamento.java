@@ -43,4 +43,17 @@ public class Apartamento extends Financiamento {
 
         return valorPagamentoMes;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        String base = super.toString();
+
+        sb
+            .append(base)
+            .append(String.format("| Vagas na Garagem: %d ", getVagasGaragem()))
+            .append(String.format("| Número do Andar: %d ", getNumeroAndar()));
+
+        return sb.toString();
+    }
 }

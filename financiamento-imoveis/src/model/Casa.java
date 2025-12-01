@@ -76,4 +76,19 @@ public class Casa extends Financiamento {
 
         return valorPagamentoBrutoMes + taxaMes + valorAcrescimoSeguro;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        String base = super.toString();
+
+        sb
+            .append(base)
+            .append(String.format("| Área Construída: %.2f m² ", getAreaConstruida()))
+            .append(String.format("| Área do Terreno: %.2f m² ", getAreaTerreno()))
+            .append(String.format("| Valor Seguro Mensal: R$ %.2f ", getValorSeguroMensal()));
+
+        return sb.toString();
+    }
 }

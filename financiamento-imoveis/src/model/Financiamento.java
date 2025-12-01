@@ -71,4 +71,18 @@ public abstract class Financiamento {
         System.out.println("=".repeat(55));
         System.out.println();
     }
+
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb
+            .append(String.format("| Valor Imóvel: R$ %.2f ", getValorImovel()))
+            .append(String.format("| Prazo: %d anos ", getPrazoFinanciamentoAnos()))
+            .append(String.format("| Taxa Juros Anual: %.2f ", getTaxaJurosAnual()))
+            .append(String.format("| Pagamento Total: %.2f ", pagamentoTotal()))
+            .append(String.format("| Pagamento Mensal: %.2f ", pagamentoMensal()));
+
+        return sb.toString();
+    }
 }
